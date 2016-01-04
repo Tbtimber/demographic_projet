@@ -1,0 +1,10 @@
+BEGIN:VCARD
+VERSION:3.0
+N:Stark;Anthony;;Mr
+FN:Tony Stark
+EMAIL:tony@shield.org
+ADR:;;9826 La Jolla Farms Road;San Diego;California;;USA
+BDAY:19650404
+CATEGORIES:AB+
+REV:20151222
+END:VCARD
