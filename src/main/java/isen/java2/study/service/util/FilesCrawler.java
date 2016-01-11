@@ -1,6 +1,11 @@
 package isen.java2.study.service.util;
 
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,7 +18,16 @@ public class FilesCrawler {
      * @return the list of Path containing the different files
      */
     public static List<Path> getFiles(String path) {
-        //TODO implement the method (use an ArrayList) (see page 3)
-        return null;
+        //TODO test implementation
+        Path root = Paths.get(path);
+        ArrayList<Path> paths = new ArrayList<>();
+        try (DirectoryStream<Path> files = Files.newDirectoryStream(root)) {
+            for (Path p : files) {
+                paths.add(p);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return paths;
     }
 }

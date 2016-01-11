@@ -1,12 +1,19 @@
 package isen.java2.study.service.util;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Formatter;
 import java.util.List;
 
 import isen.java2.study.data.Person;
+import isen.java2.study.data.Sex;
 
 public class VCardReader {
 
@@ -31,52 +38,76 @@ public class VCardReader {
 	}
 
 	private static List<String> getAllLines(Path path) throws IOException {
-		// TODO return all lines of the file described in "path" parameter
-		return null;
+        ArrayList<String> lines = new ArrayList<>();
+        if(Files.exists(path)) {
+            FileReader fr = new FileReader(path.toFile());
+            BufferedReader br = new BufferedReader(fr);
+            String currentLine = null;
+            while ((currentLine = br.readLine()) != null) {
+                lines.add(currentLine);
+            }
+        }
+		return lines;
 	}
 
 	private static Person parseN(Person person, String line) {
-		// TODO if line begins with "N:", then split the line with ";" separator
-		// TODO the first element is the lastName, the second is the first name
-		// TODO if the fourth element is equal to "Mr", set the sex to Sex.MALE,
-		// Sex.FEMALE otherwise
-		// TODO return the person you got as parameter, with the new values
-		// inside
+        //String trimedLine = line.trim();
+        String trimedLine = line;
+        if(trimedLine.startsWith("N:")) {
+            trimedLine = trimedLine.substring(2);
+            String infos[] = trimedLine.split(";");
+            if(infos.length == 4) {
+                person.setLastName(infos[0]);
+                person.setFirstName(infos[1]);
+                if(infos[3].matches("Mr"))
+                    person.setSex(Sex.MALE);
+                else
+                    person.setSex(Sex.FEMALE);
+            }
+        }
 		return person;
 	}
 
 	private static Person parseEmail(Person person, String line) {
-		// TODO if line begins with "EMAIL:", apply the correct substring to
-		// retrieve the email
-		// TODO return the person you got as parameter, with the new values
-		// inside
+        //String trimedLine = line.trim();
+        String trimedLine = line;
+        if(trimedLine.startsWith("EMAIL:")) {
+            trimedLine = trimedLine.substring(6);
+            person.setEmail(trimedLine);
+        }
 		return person;
 	}
 
 	private static Person parseAddress(Person person, String line) {
-		// TODO if line begins with "ADR:", then split the line with ";"
-		// separator
-		// TODO the third element is the streetName
-		// TODO the fourth element is the city
-		// TODO the fifth element is the state
-		// TODO return the person you got as parameter, with the new values
-		// inside
+        String trimedLine = line.trim();
+        //String trimedLine = line;
+        if(trimedLine.startsWith("ADR:")) {
+            String infos[] = trimedLine.substring(4).split(";");
+            if(infos.length >= 5) {
+                person.setStreetName(infos[2]);
+                person.setCity(infos[3]);
+                person.setState(infos[4]);
+            }
+        }
 		return person;
 	}
 
 	private static Person parseDateOfBirth(Person person, String line) throws ParseException {
-		// TODO if line begins with "BDAY:", parse the date thanks to
-		// LocalDate.parse() and the given formatter
-		// TODO return the person you got as parameter, with the new values
-		// inside
+        //String trimedLine = line.trim();
+        String trimedLine = line;
+        if(trimedLine.startsWith("BDAY:")) {
+            person.setDateOfBirth(LocalDate.parse(trimedLine.substring(5), DateTimeFormatter.ofPattern("yyyyMMdd")));
+        }
 		return person;
 	}
 
 	private static Person parseBloodType(Person person, String line) {
-		// TODO if line begins with "CATEGORIES:", apply the correct substring
-		// to retrieve the email
-		// TODO return the person you got as parameter, with the new values
-		// inside
+        //String trimmedLine = line.trim();
+        String trimedLine = line;
+        if(trimedLine.startsWith("CATEGORIES:")) {
+            trimedLine = trimedLine.substring(11);
+            person.setBloodType(trimedLine);
+        }
 		return person;
 	}
 

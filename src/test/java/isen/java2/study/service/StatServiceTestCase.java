@@ -8,9 +8,8 @@ import static org.mockito.Mockito.verify;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
-
 import isen.java2.study.data.stat.Stat;
+import org.junit.Test;
 
 public class StatServiceTestCase {
 

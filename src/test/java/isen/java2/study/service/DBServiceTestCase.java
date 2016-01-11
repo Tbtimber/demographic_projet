@@ -25,6 +25,7 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 import isen.java2.study.data.Person;
 import isen.java2.study.data.Sex;
+import isen.java2.study.data.stat.Stat;
 
 public class DBServiceTestCase {
 	private String query = "INSERT INTO `isen_project`.`person` (`lastname`, `firstname`, `sex`, `streetname`, `state`, `city`, `bloodtype`, `dateofbirth`) VALUES (?, ?,?, ?, ?, ?, ?, ?)";
@@ -101,7 +102,6 @@ public class DBServiceTestCase {
 		verify(statementMock).executeQuery(eq("query"));
 		verify(stat).getQuery();
 		verify(stat).handle(any(ResultSet.class));
-
 	}
 
 	private DBService getService() {
