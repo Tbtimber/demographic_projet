@@ -33,6 +33,7 @@ public class DBService {
             stmt.setString(1, person.getLastName());
             stmt.setString(2, person.getFirstName());
             String sex = null;
+            System.out.println("Saving into DB: " + person.getFirstName() + " " + person.getLastName());
             if(person.getSex() == Sex.MALE)
                 sex = "MALE";
             else
@@ -51,7 +52,6 @@ public class DBService {
 
     public void executeStat(Stat stat) {
         //TODO implement the method (see page 6)
-
     }
 }
 
