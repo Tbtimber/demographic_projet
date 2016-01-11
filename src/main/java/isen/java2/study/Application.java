@@ -7,7 +7,7 @@ import java.util.Properties;
 public class Application {
 
 	public static void main(String[] args) {
-
+		//TODO ask teacher about StatService
 	}
 
 	private static Properties loadProperties() {
