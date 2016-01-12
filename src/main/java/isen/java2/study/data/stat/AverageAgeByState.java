@@ -22,7 +22,7 @@ public class AverageAgeByState implements Stat {
 
     @Override
     public void handle(ResultSet set) throws SQLException {
-        //TODO implement method
+        //TODO test if values are correct (ask teacher ?)
         while (set.next()) {
             String state = set.getString("state");
             int avg = set.getInt(2);

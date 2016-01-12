@@ -50,7 +50,9 @@ public class DBService {
     public void executeStat(Stat stat) {
         //TODO implement the method (see page 6)
         try (Connection connection = dataSource.getConnection(); PreparedStatement stmt = connection.prepareStatement(stat.getQuery())){
-            stat.handle(stmt.executeQuery());
+            ResultSet set = stmt.executeQuery();
+            stat.handle(set);
+            set.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

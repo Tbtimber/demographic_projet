@@ -7,8 +7,8 @@ import java.sql.SQLException;
  * Created by Matthieu on 12/01/2016.
  */
 public class MostCommonBloodType implements Stat {
-    private static final String QUERY = "SELECT lastname, state, count(id)as total FROM person GROUP BY state,lastname " +
-            "HAVING total > 4 ORDER BY total DESC, state;";
+    private static final String QUERY = "SELECT bloodtype, count(id) as total FROM person " +
+            "GROUP BY bloodtype ORDER BY total DESC;";
     private static final String DESCRIPTION = "Most common blood type";
     @Override
     public String getDescription() {
@@ -22,6 +22,15 @@ public class MostCommonBloodType implements Stat {
 
     @Override
     public void handle(ResultSet set) throws SQLException {
-        //TODO implement method
+        //TODO implement method (redo)
+        //Precedent result : "Blood type :  - Number of people : 1106"
+        set.next();
+        String bloodT = set.getString("bloodtype");
+        int number = set.getInt(2);
+        System.out.println("Blood type : " + " - Number of people : "+ number);
+        while (set.next()) {
+
+        }
     }
+
 }
