@@ -5,10 +5,7 @@ import isen.java2.study.data.Person;
 import isen.java2.study.data.Sex;
 import isen.java2.study.data.stat.Stat;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Properties;
 
 /**
@@ -52,6 +49,11 @@ public class DBService {
 
     public void executeStat(Stat stat) {
         //TODO implement the method (see page 6)
+        try (Connection connection = dataSource.getConnection(); PreparedStatement stmt = connection.prepareStatement(stat.getQuery())){
+            stat.handle(stmt.executeQuery());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
 

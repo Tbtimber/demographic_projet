@@ -23,5 +23,10 @@ public class AverageAgeByState implements Stat {
     @Override
     public void handle(ResultSet set) throws SQLException {
         //TODO implement method
+        while (set.next()) {
+            String state = set.getString("state");
+            int avg = set.getInt(2);
+            System.out.println("State : " + state + ". Average age : " + avg);
+        }
     }
 }

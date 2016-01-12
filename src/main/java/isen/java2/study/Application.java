@@ -1,11 +1,15 @@
 package isen.java2.study;
 
+import isen.java2.study.data.stat.AverageAgeByState;
+import isen.java2.study.data.stat.Stat;
 import isen.java2.study.service.DBService;
 import isen.java2.study.service.StatService;
 import isen.java2.study.service.VCardRecorderService;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class Application {
@@ -15,8 +19,13 @@ public class Application {
 		DBService dbService = new DBService(property);
 		VCardRecorderService vCardRecorderService = new VCardRecorderService(dbService, property);
 		StatService statService = new StatService(dbService);
+		List<Stat> stats = new ArrayList<>();
+		stats.add(new AverageAgeByState());
+
 		vCardRecorderService.readAndSaveCards();
 		//TODO add stat class and all ...
+		statService.printStats(stats);
+
 	}
 
 	private static Properties loadProperties() {
