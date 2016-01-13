@@ -22,7 +22,7 @@ public class VCardRecorderService {
     }
 
     public void readAndSaveCards() {
-        //TODO implement the method (see page 7)
+        //TODO test implementation
         List<Path> files = FilesCrawler.getFiles(properties.getProperty("vcards.folder"));
         for(Path p:files) {
             dbService.save(VCardReader.read(p));

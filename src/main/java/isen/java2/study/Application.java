@@ -1,6 +1,7 @@
 package isen.java2.study;
 
 import isen.java2.study.data.stat.AverageAgeByState;
+import isen.java2.study.data.stat.CommonLastnamesByState;
 import isen.java2.study.data.stat.MostCommonBloodType;
 import isen.java2.study.data.stat.Stat;
 import isen.java2.study.service.DBService;
@@ -23,8 +24,8 @@ public class Application {
 		List<Stat> stats = new ArrayList<>();
 		stats.add(new AverageAgeByState());
 		stats.add(new MostCommonBloodType());
+		stats.add(new CommonLastnamesByState(2));
 		vCardRecorderService.readAndSaveCards();
-		//TODO add stat class and all ...
 		statService.printStats(stats);
 
 	}

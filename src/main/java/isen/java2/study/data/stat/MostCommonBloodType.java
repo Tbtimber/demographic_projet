@@ -22,12 +22,12 @@ public class MostCommonBloodType implements Stat {
 
     @Override
     public void handle(ResultSet set) throws SQLException {
-        //TODO implement method (redo)
+        //TODO are values correct ?
         //Precedent result : "Blood type :  - Number of people : 1106"
         set.next();
         String bloodT = set.getString("bloodtype");
         int number = set.getInt(2);
-        System.out.println("Blood type : " + " - Number of people : "+ number);
+        System.out.println("Blood type : " + bloodT + " - Number of people : "+ number);
         while (set.next()) {
 
         }
