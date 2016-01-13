@@ -1,6 +1,7 @@
 package isen.java2.study.service;
 
 import isen.java2.study.data.stat.Stat;
+import isen.java2.study.service.util.VCardListener;
 
 import java.util.List;
 
@@ -15,10 +16,11 @@ public class StatService {
         this.dbService = dbService;
     }
 
-    public void printStats(List<Stat> stats) {
+    public void printStats(List<Stat> stats, VCardListener mListener) {
         //TODO test implementation
         for(Stat st:stats) {
-            System.out.println("\n\n=====" + st.getDescription() + "=====");
+            //System.out.println("\n\n=====" + st.getDescription() + "=====");
+            mListener.newThingsToSay("\n\n=====" + st.getDescription() + "=====\n");
             dbService.executeStat(st);
         }
     }

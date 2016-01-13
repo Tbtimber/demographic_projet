@@ -1,6 +1,8 @@
 package isen.java2.study.service;
 
+import isen.java2.study.data.Person;
 import isen.java2.study.service.util.FilesCrawler;
+import isen.java2.study.service.util.VCardListener;
 import isen.java2.study.service.util.VCardReader;
 
 import java.io.FileReader;
@@ -15,17 +17,23 @@ import java.util.Properties;
 public class VCardRecorderService {
     DBService dbService;
     Properties properties;
+    VCardListener mListener;
 
-    public VCardRecorderService(DBService dbService, Properties properties) {
+    public VCardRecorderService(DBService dbService, Properties properties, VCardListener mListener) {
         this.dbService = dbService;
         this.properties = properties;
+        this.mListener = mListener;
     }
 
     public void readAndSaveCards() {
         //TODO test implementation
         List<Path> files = FilesCrawler.getFiles(properties.getProperty("vcards.folder"));
+        System.out.println("Starting registering into DB");
         for(Path p:files) {
-            dbService.save(VCardReader.read(p));
+            Person person = VCardReader.read(p);
+            mListener.newThingsToSay("Saving into Database: " + person.getFirstName() + " " + person.getLastName() + "\n");
+            dbService.save(person);
         }
+        System.out.println("End of registering into DB");
     }
 }

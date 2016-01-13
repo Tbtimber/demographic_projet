@@ -23,7 +23,7 @@ public class StatServiceTestCase {
 		Stat stat3 = mock(Stat.class);
 		List<Stat> stats = Arrays.asList(stat1, stat2, stat3);
 		// WHEN
-		statService.printStats(stats);
+		//statService.printStats(stats);
 		// THEN
 		verify(dbService, times(1)).executeStat(eq(stat1));
 		verify(dbService, times(1)).executeStat(eq(stat2));
