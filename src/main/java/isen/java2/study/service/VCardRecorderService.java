@@ -14,10 +14,15 @@ import java.util.Properties;
  * Created by Matthieu on 11/01/2016.
  */
 //TODO prepare JUnit to test class
-public class VCardRecorderService {
+public class VCardRecorderService extends Thread{
     DBService dbService;
     Properties properties;
     VCardListener mListener;
+
+    @Override
+    public void run() {
+        readAndSaveCards();
+    }
 
     public VCardRecorderService(DBService dbService, Properties properties, VCardListener mListener) {
         this.dbService = dbService;
@@ -31,7 +36,14 @@ public class VCardRecorderService {
         System.out.println("Starting registering into DB");
         for(Path p:files) {
             Person person = VCardReader.read(p);
-            mListener.newThingsToSay("Saving into Database: " + person.getFirstName() + " " + person.getLastName() + "\n");
+            //mListener.newThingsToSay("Saving into Database: " + person.getFirstName() + " " + person.getLastName() + "\n");
+            String phrase = "Saving into Database: " + person.getFirstName() + " " + person.getLastName() + "\n";
+            mListener.newThingsToSay(phrase);
+            try {
+                sleep(30);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             dbService.save(person);
         }
         System.out.println("End of registering into DB");

@@ -60,7 +60,15 @@ public class MainViewController implements VCardListener{
 
     @FXML
     public void handleReadVCard() {
-        vCardRecorderService.readAndSaveCards();
+        //vCardRecorderService.readAndSaveCards();
+        //vCardRecorderService.start();
+        try {
+            VCardRecorderService recorderService = new VCardRecorderService(dbService,property,this);
+            recorderService.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @FXML
@@ -96,7 +104,6 @@ public class MainViewController implements VCardListener{
 
     @FXML
     public void handleProgressBar() {
-
     }
 
     @FXML
@@ -109,7 +116,7 @@ public class MainViewController implements VCardListener{
     }
 
     @Override
-    public void newThingsToSay(String phrase) {
+    public synchronized void newThingsToSay(String phrase) {
         textArea.setText(textArea.getText() + phrase);
         textArea.setScrollTop(Double.MAX_VALUE);
         textArea.appendText("");

@@ -11,10 +11,15 @@ import java.util.Properties;
 /**
  * Created by Matthieu on 11/01/2016.
  */
-public class DBService {
+public class DBService extends Thread{
     private static final String SAVE_QUERY = "INSERT INTO `isen_project`.`person` (`lastname`, `firstname`, `sex`, " +
             "`streetname`, `state`, `city`, `bloodtype`, `dateofbirth`) VALUES (?, ?,?, ?, ?, ?, ?, ?)";
     MysqlDataSource dataSource;
+    Person person;
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
 
     public DBService(Properties properties) {
         dataSource = new MysqlDataSource();
@@ -25,7 +30,32 @@ public class DBService {
         dataSource.setDatabaseName(properties.getProperty("db.schema"));
     }
 
-    public void save(Person person) {
+    @Override
+    public void run() {
+        save();
+    }
+    public void save() {
+        try (Connection connection = dataSource.getConnection(); PreparedStatement stmt = connection.prepareStatement(SAVE_QUERY)){
+            stmt.setString(1, person.getLastName());
+            stmt.setString(2, person.getFirstName());
+            String sex = null;
+            //System.out.println("Saving into DB: " + person.getFirstName() + " " + person.getLastName());
+            if(person.getSex() == Sex.MALE)
+                sex = "MALE";
+            else
+                sex = "FEMALE";
+            stmt.setString(3, sex);
+            stmt.setString(4, person.getStreetName());
+            stmt.setString(5, person.getState());
+            stmt.setString(6, person.getCity());
+            stmt.setString(7, person.getBloodType());
+            stmt.setDate(8, Date.valueOf(person.getDateOfBirth()));
+            int nbLines = stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public synchronized void save(Person person) {
         try (Connection connection = dataSource.getConnection(); PreparedStatement stmt = connection.prepareStatement(SAVE_QUERY)){
             stmt.setString(1, person.getLastName());
             stmt.setString(2, person.getFirstName());
