@@ -9,18 +9,14 @@ import isen.java2.study.service.DBService;
 import isen.java2.study.service.StageService;
 import isen.java2.study.service.StatService;
 import isen.java2.study.service.VCardRecorderService;
+import isen.java2.study.service.util.HistoricUtil;
 import isen.java2.study.service.util.VCardListener;
-import javafx.application.Preloader;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringBinding;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -30,7 +26,6 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -38,7 +33,7 @@ import java.util.Properties;
 /**
  * Created by Matthieu on 13/01/2016.
  */
-public class MainViewController implements VCardListener, ChangeListener{
+public class  MainViewController implements VCardListener, ChangeListener{
     //Model element !
     private Properties property;
     private DBService dbService;
@@ -83,6 +78,34 @@ public class MainViewController implements VCardListener, ChangeListener{
     @FXML
     private TextField textField;
 
+    @FXML
+    private Button gotoHistoric;
+
+    private Scene prepareHistoricScene() {
+        final NumberAxis xAxis = new NumberAxis();
+        final NumberAxis yAxis = new NumberAxis();
+
+        HistoricUtil.writeNewValueToFile();
+
+        xAxis.setLabel("Session index");
+        yAxis.setLabel("Lines added to Database");
+
+        final LineChart<Number,Number> lineChart = new LineChart<Number, Number>(xAxis,yAxis);
+
+        XYChart.Series serie = new XYChart.Series();
+
+        serie.setName("Lines");
+        HistoricUtil.addDataToSerie(serie);
+        lineChart.getData().add(serie);
+
+        return new Scene(lineChart, 760,573);
+    }
+
+
+    @FXML
+    public void handleGoToHistoric() {
+        StageService.getInstance().getPrimaryStage().setScene(prepareHistoricScene());
+    }
 
     public void updateBarChart() {
         barChartAge.getData().add(seriesAge);
@@ -115,6 +138,8 @@ public class MainViewController implements VCardListener, ChangeListener{
 
     @FXML
     public void initialize() {
+        HistoricUtil.setSessionIndex();
+
         stringProperty = new SimpleStringProperty("Welcome :) \n");
         stringProperty.addListener(this);
 
@@ -216,10 +241,6 @@ public class MainViewController implements VCardListener, ChangeListener{
         }
     }
 
-
-    @FXML
-    public void handleProgressBar() {
-    }
 
     @FXML
     public void handleIterationValue() {

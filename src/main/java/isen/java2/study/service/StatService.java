@@ -2,11 +2,11 @@ package isen.java2.study.service;
 
 import isen.java2.study.data.stat.Stat;
 import isen.java2.study.service.util.VCardListener;
-import javafx.concurrent.Task;
 
 import java.util.List;
 
 /**
+ *
  * Created by Matthieu on 11/01/2016.
  */
 //TODO Create Junit for this class

@@ -9,7 +9,6 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Formatter;
 import java.util.List;
 
 import isen.java2.study.data.Person;
@@ -37,7 +36,7 @@ public class VCardReader {
 
 	}
 
-	private static List<String> getAllLines(Path path) throws IOException {
+	public static List<String> getAllLines(Path path) throws IOException {
         ArrayList<String> lines = new ArrayList<>();
         if(Files.exists(path)) {
             FileReader fr = new FileReader(path.toFile());

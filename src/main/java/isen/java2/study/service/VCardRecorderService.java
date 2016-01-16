@@ -6,9 +6,7 @@ import isen.java2.study.service.util.VCardListener;
 import isen.java2.study.service.util.VCardReader;
 import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
-import javafx.concurrent.Worker;
 
-import java.io.FileReader;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Properties;
