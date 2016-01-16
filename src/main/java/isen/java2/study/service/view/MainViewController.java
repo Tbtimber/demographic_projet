@@ -17,13 +17,12 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 
 import java.io.IOException;
@@ -44,11 +43,18 @@ public class MainViewController implements VCardListener, ChangeListener{
 
     StringProperty stringProperty;
 
+    //Age chart variables
     private CategoryAxis ageXAxis;
     private NumberAxis ageYAxis;
     private XYChart.Series seriesAge;
 
+
+    //Blood chart variables
+    private ObservableList<PieChart.Data> bloodPieData;
+
     //FXML element
+    @FXML
+    private PieChart bloodPie;
     @FXML
     private BarChart barChartAge;
     @FXML
@@ -70,7 +76,7 @@ public class MainViewController implements VCardListener, ChangeListener{
     @FXML
     private TextField textField;
 
-    @Override
+
     public void updateBarChart() {
         barChartAge.getData().add(seriesAge);
     }
@@ -84,6 +90,22 @@ public class MainViewController implements VCardListener, ChangeListener{
         seriesAge.getData().add(new XYChart.Data(category, ageValue));
     }
 
+    @Override
+    public void addBloodPieValue(String category, int ageValue) {
+        bloodPieData.add(new PieChart.Data(category, ageValue));
+    }
+
+    public void updateBloodPie() {
+        bloodPie.setData(bloodPieData);
+    }
+
+
+
+    public void clearBloodPie() {
+        bloodPieData.clear();
+        bloodPie.getData().clear();
+    }
+
     @FXML
     public void initialize() {
         stringProperty = new SimpleStringProperty("Welcome :) \n");
@@ -95,7 +117,7 @@ public class MainViewController implements VCardListener, ChangeListener{
         statService = new StatService(dbService);
         textArea.setText("Welcome :) \n");
 
-
+        //Initialize the age chart
         seriesAge = new XYChart.Series<String,Integer>();
         NumberAxis ageYAxis = new NumberAxis();
         ageXAxis = new CategoryAxis();
@@ -105,6 +127,9 @@ public class MainViewController implements VCardListener, ChangeListener{
         ageYAxis.setLabel("Age");
         seriesAge.setName("Age by state");
 
+
+        //Initialize the blood pie chart
+        bloodPieData = FXCollections.observableArrayList();
     }
 
     @FXML
@@ -154,7 +179,9 @@ public class MainViewController implements VCardListener, ChangeListener{
             updateBarChart();
         }
         if(bloodType.isSelected()) {
+            clearBloodPie();
             stats.add(new MostCommonBloodType(this));
+            updateBloodPie();
         }
         if(lastNames.isSelected()) {
             stats.add(new CommonLastnamesByState(getLastnameValue(), this));

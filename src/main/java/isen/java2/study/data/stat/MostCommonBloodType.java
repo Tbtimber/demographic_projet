@@ -33,13 +33,13 @@ public class MostCommonBloodType implements Stat {
     public void handle(ResultSet set) throws SQLException {
         //TODO are values correct ?
         //Precedent result : "Blood type :  - Number of people : 1106"
-        set.next();
-        String bloodT = set.getString("bloodtype");
-        int number = set.getInt(2);
-        //System.out.println("Blood type : " + bloodT + " - Number of people : "+ number);
-        mListener.newThingsToSay("Blood type : " + bloodT + " - Number of people : "+ number+"\n");
-        while (set.next()) {
 
+        while (set.next()) {
+            String bloodT = set.getString("bloodtype");
+            int number = set.getInt(2);
+            //System.out.println("Blood type : " + bloodT + " - Number of people : "+ number);
+            mListener.newThingsToSay("Blood type : " + bloodT + " - Number of people : "+ number+"\n");
+            mListener.addBloodPieValue(bloodT,number);
         }
     }
 
