@@ -5,6 +5,7 @@ import javafx.scene.chart.XYChart;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -15,6 +16,8 @@ import java.util.List;
 public class HistoricUtil {
     private static int linesAdded = 0;
     private static int currentSessionIndex = -1;
+
+
 
     private static final Path FILEPATH = Paths.get("c:/isen/java2/project/historic.txt");
 
@@ -33,13 +36,23 @@ public class HistoricUtil {
         }
     }
 
-
+    private static void checkHistoricfileExistence() {
+        if (!Files.exists(FILEPATH)) {
+            try {
+                FILEPATH.toFile().createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public static void writeNewValueToFile() {
+         checkHistoricfileExistence();
         try {
             FileWriter fw = new FileWriter(FILEPATH.toFile(), true);
             BufferedWriter bw = new BufferedWriter(fw);
-            bw.append(Integer.toString(currentSessionIndex )+ ";" + Integer.toString(linesAdded));
+            bw.append(System.getProperty("line.separator") + Integer.toString(currentSessionIndex )+ ";" + Integer.toString(linesAdded));
+            bw.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -48,7 +61,10 @@ public class HistoricUtil {
     public static void setSessionIndex() {
         try {
             List<String> lines = VCardReader.getAllLines(FILEPATH);
-            currentSessionIndex = lines.size();
+            if (lines.size() == 0)
+                currentSessionIndex = 1;
+            else
+                currentSessionIndex = lines.size();
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -57,8 +73,4 @@ public class HistoricUtil {
     public static void concatLinesAdded(int linesAdded) {
         HistoricUtil.linesAdded += linesAdded;
     }
-    public static int getLinesAdded() {
-        return linesAdded;
-    }
-
 }
