@@ -10,6 +10,7 @@ import isen.java2.study.service.StatService;
 import isen.java2.study.service.VCardRecorderService;
 import isen.java2.study.service.util.VCardListener;
 import javafx.fxml.FXML;
+import javafx.scene.chart.BarChart;
 import javafx.scene.control.*;
 
 import java.io.IOException;
@@ -30,6 +31,8 @@ public class MainViewController implements VCardListener{
 
 
     //FXML element
+    @FXML
+    private BarChart barChart;
     @FXML
     private Button clearText;
     @FXML
@@ -120,5 +123,10 @@ public class MainViewController implements VCardListener{
         textArea.setText(textArea.getText() + phrase);
         textArea.setScrollTop(Double.MAX_VALUE);
         textArea.appendText("");
+        try {
+            wait(5);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

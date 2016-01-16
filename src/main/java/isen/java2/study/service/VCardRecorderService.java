@@ -39,11 +39,6 @@ public class VCardRecorderService extends Thread{
             //mListener.newThingsToSay("Saving into Database: " + person.getFirstName() + " " + person.getLastName() + "\n");
             String phrase = "Saving into Database: " + person.getFirstName() + " " + person.getLastName() + "\n";
             mListener.newThingsToSay(phrase);
-            try {
-                sleep(30);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             dbService.save(person);
         }
         System.out.println("End of registering into DB");
