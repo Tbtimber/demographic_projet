@@ -22,11 +22,15 @@ import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -51,6 +55,9 @@ public class MainViewController implements VCardListener, ChangeListener{
 
     //Blood chart variables
     private ObservableList<PieChart.Data> bloodPieData;
+
+
+
 
     //FXML element
     @FXML
