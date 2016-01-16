@@ -21,6 +21,9 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 
 import java.io.IOException;
@@ -41,9 +44,13 @@ public class MainViewController implements VCardListener, ChangeListener{
 
     StringProperty stringProperty;
 
+    private CategoryAxis ageXAxis;
+    private NumberAxis ageYAxis;
+    private XYChart.Series seriesAge;
+
     //FXML element
     @FXML
-    private BarChart barChart;
+    private BarChart barChartAge;
     @FXML
     private Button clearText;
     @FXML
@@ -63,6 +70,20 @@ public class MainViewController implements VCardListener, ChangeListener{
     @FXML
     private TextField textField;
 
+    @Override
+    public void updateBarChart() {
+        barChartAge.getData().add(seriesAge);
+    }
+
+    public void clearAgeChart() {
+        seriesAge.getData().clear();
+        barChartAge.getData().clear();
+    }
+
+    public void addAgeChartValue(String category, int ageValue) {
+        seriesAge.getData().add(new XYChart.Data(category, ageValue));
+    }
+
     @FXML
     public void initialize() {
         stringProperty = new SimpleStringProperty("Welcome :) \n");
@@ -74,6 +95,15 @@ public class MainViewController implements VCardListener, ChangeListener{
         statService = new StatService(dbService);
         textArea.setText("Welcome :) \n");
 
+
+        seriesAge = new XYChart.Series<String,Integer>();
+        NumberAxis ageYAxis = new NumberAxis();
+        ageXAxis = new CategoryAxis();
+
+
+        ageXAxis.setLabel("State");
+        ageYAxis.setLabel("Age");
+        seriesAge.setName("Age by state");
 
     }
 
@@ -118,8 +148,11 @@ public class MainViewController implements VCardListener, ChangeListener{
     @FXML
     public void handleGetStats() {
         List<Stat> stats = new ArrayList<>();
-        if(age.isSelected())
+        if(age.isSelected()) {
+            clearAgeChart();
             stats.add(new AverageAgeByState(this));
+            updateBarChart();
+        }
         if(bloodType.isSelected()) {
             stats.add(new MostCommonBloodType(this));
         }

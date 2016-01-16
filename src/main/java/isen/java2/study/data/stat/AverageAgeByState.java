@@ -35,6 +35,7 @@ public class AverageAgeByState implements Stat {
             int avg = set.getInt(2);
             //System.out.println("State : " + state + ". Average age : " + avg);
             mListener.newThingsToSay("State : " + state + ". Average age : " + avg+"\n");
+            mListener.addAgeChartValue(state,avg);
         }
     }
 }

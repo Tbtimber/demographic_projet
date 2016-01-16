@@ -5,4 +5,6 @@ package isen.java2.study.service.util;
  */
 public interface VCardListener {
     void newThingsToSay(String addToTextArea) ;
+    void updateBarChart();
+    void addAgeChartValue(String category, int ageValue);
 }
