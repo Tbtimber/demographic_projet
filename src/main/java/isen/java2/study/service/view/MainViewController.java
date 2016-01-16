@@ -6,6 +6,7 @@ import isen.java2.study.data.stat.CommonLastnamesByState;
 import isen.java2.study.data.stat.MostCommonBloodType;
 import isen.java2.study.data.stat.Stat;
 import isen.java2.study.service.DBService;
+import isen.java2.study.service.StageService;
 import isen.java2.study.service.StatService;
 import isen.java2.study.service.VCardRecorderService;
 import isen.java2.study.service.util.VCardListener;
@@ -123,10 +124,31 @@ public class MainViewController implements VCardListener, ChangeListener{
             stats.add(new MostCommonBloodType(this));
         }
         if(lastNames.isSelected()) {
-            stats.add(new CommonLastnamesByState(2, this));
+            stats.add(new CommonLastnamesByState(getLastnameValue(), this));
         }
         statService.printStats(stats, this);
     }
+
+    private int getLastnameValue() {
+        try {
+            int val = Integer.parseInt(textField.getText());
+            if(val > 1) {
+                return val;
+            } else {
+                return CommonLastnamesByState.DEFAULT_N_VALUE;
+            }
+        } catch (NumberFormatException e) {
+           // e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.initOwner(StageService.getInstance().getPrimaryStage());
+            alert.setTitle("Error");
+            alert.setHeaderText("Error: The value entered is incorrect");
+            alert.setContentText("The default value will be used for the moment : " + CommonLastnamesByState.DEFAULT_N_VALUE);
+            alert.show();
+            return CommonLastnamesByState.DEFAULT_N_VALUE;
+        }
+    }
+
 
     @FXML
     public void handleProgressBar() {

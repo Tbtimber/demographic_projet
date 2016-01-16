@@ -14,6 +14,10 @@ public class CommonLastnamesByState implements Stat {
         this.mListener = mListener;
         this.n = n;
     }
+
+    public static final int DEFAULT_N_VALUE = 2;
+
+
     private static final String QUERY_1 = "SELECT lastname, state, count(id)as total FROM person GROUP BY state," +
             "lastname HAVING total > ";
     private static final String QUERY_2 =" ORDER BY total DESC, state;";
