@@ -2,6 +2,7 @@ package isen.java2.study.service;
 
 import isen.java2.study.data.stat.Stat;
 import isen.java2.study.service.util.VCardListener;
+import javafx.concurrent.Task;
 
 import java.util.List;
 
@@ -11,6 +12,12 @@ import java.util.List;
 //TODO Create Junit for this class
 public class StatService {
     DBService dbService;
+
+    public StatService(DBService dbService, List<Stat> mstats, VCardListener mListener) {
+        this.dbService = dbService;
+    }
+
+
 
     public StatService(DBService dbService) {
         this.dbService = dbService;

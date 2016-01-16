@@ -9,6 +9,15 @@ import isen.java2.study.service.DBService;
 import isen.java2.study.service.StatService;
 import isen.java2.study.service.VCardRecorderService;
 import isen.java2.study.service.util.VCardListener;
+import javafx.application.Preloader;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.control.*;
@@ -22,13 +31,14 @@ import java.util.Properties;
 /**
  * Created by Matthieu on 13/01/2016.
  */
-public class MainViewController implements VCardListener{
+public class MainViewController implements VCardListener, ChangeListener{
     //Model element !
     private Properties property;
     private DBService dbService;
     private VCardRecorderService vCardRecorderService;
     private StatService statService;
 
+    StringProperty stringProperty;
 
     //FXML element
     @FXML
@@ -54,11 +64,16 @@ public class MainViewController implements VCardListener{
 
     @FXML
     public void initialize() {
+        stringProperty = new SimpleStringProperty("Welcome :) \n");
+        stringProperty.addListener(this);
+
         property = loadProperties();
         dbService = new DBService(property);
-        vCardRecorderService = new VCardRecorderService(dbService,property,this);
+
         statService = new StatService(dbService);
-        textArea.setText("Welcome :) ");
+        textArea.setText("Welcome :) \n");
+
+
     }
 
     @FXML
@@ -66,8 +81,16 @@ public class MainViewController implements VCardListener{
         //vCardRecorderService.readAndSaveCards();
         //vCardRecorderService.start();
         try {
-            VCardRecorderService recorderService = new VCardRecorderService(dbService,property,this);
-            recorderService.start();
+            VCardRecorderService recorderService = new VCardRecorderService(dbService,property,this, stringProperty);
+            //recorderService.setDaemon(true);
+            //recorderService.start();
+            //recorderService.readAndSaveCards();
+            recorderService.messageProperty().addListener(this);
+            Thread th = new Thread(recorderService);
+            th.setDaemon(true);
+            progressBar.progressProperty().bind(recorderService.progressProperty());
+            th.start();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -102,7 +125,7 @@ public class MainViewController implements VCardListener{
         if(lastNames.isSelected()) {
             stats.add(new CommonLastnamesByState(2, this));
         }
-        statService.printStats(stats,this);
+        statService.printStats(stats, this);
     }
 
     @FXML
@@ -120,13 +143,13 @@ public class MainViewController implements VCardListener{
 
     @Override
     public synchronized void newThingsToSay(String phrase) {
-        textArea.setText(textArea.getText() + phrase);
+        textArea.appendText(phrase);
         textArea.setScrollTop(Double.MAX_VALUE);
         textArea.appendText("");
-        try {
-            wait(5);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    }
+
+    @Override
+    public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+        newThingsToSay((String) newValue);
     }
 }
