@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * Stat representing CommonLastnames by state meaning if a name appear N or more times it will be stocked
  * Created by Matthieu on 12/01/2016.
  */
 public class CommonLastnamesByState implements Stat {
@@ -41,7 +42,6 @@ public class CommonLastnamesByState implements Stat {
 
     @Override
     public void handle(ResultSet set) throws SQLException {
-        //TODO implement method
         while (set.next()) {
             //System.out.println("Lastname : " + set.getString(1) + " - State: " + set.getString(2));
             mListener.newThingsToSay("Lastname : " + set.getString(1) + " - State: " + set.getString(2)+"\n");

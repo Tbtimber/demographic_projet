@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * Stat giving the most common blood types
  * Created by Matthieu on 12/01/2016.
  */
 public class MostCommonBloodType implements Stat {
@@ -31,13 +32,9 @@ public class MostCommonBloodType implements Stat {
 
     @Override
     public void handle(ResultSet set) throws SQLException {
-        //TODO are values correct ?
-        //Precedent result : "Blood type :  - Number of people : 1106"
-
         while (set.next()) {
             String bloodT = set.getString("bloodtype");
             int number = set.getInt(2);
-            //System.out.println("Blood type : " + bloodT + " - Number of people : "+ number);
             mListener.newThingsToSay("Blood type : " + bloodT + " - Number of people : "+ number+"\n");
             mListener.addBloodPieValue(bloodT,number);
         }

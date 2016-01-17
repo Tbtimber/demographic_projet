@@ -54,7 +54,6 @@ public class DBService {
     }
 
     public void executeStat(Stat stat) {
-        //TODO test method implementation
         try (Connection connection = dataSource.getConnection(); PreparedStatement stmt = connection.prepareStatement(stat.getQuery())){
             ResultSet set = stmt.executeQuery();
             stat.handle(set);

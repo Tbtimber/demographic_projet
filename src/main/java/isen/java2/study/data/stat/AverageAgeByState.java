@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * State showing the average of the population per state
  * Created by Matthieu on 12/01/2016.
  */
 public class AverageAgeByState implements Stat {
@@ -29,7 +30,6 @@ public class AverageAgeByState implements Stat {
 
     @Override
     public void handle(ResultSet set) throws SQLException {
-        //TODO test if values are correct (ask teacher ?)
         while (set.next()) {
             String state = set.getString("state");
             int avg = set.getInt(2);

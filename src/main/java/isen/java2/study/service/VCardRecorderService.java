@@ -12,9 +12,10 @@ import java.util.List;
 import java.util.Properties;
 
 /**
+ * Service class reading and saving to db the vcard
  * Created by Matthieu on 11/01/2016.
  */
-//TODO prepare JUnit to test class
+
 public class VCardRecorderService extends Task{
     DBService dbService;
     Properties properties;
@@ -30,7 +31,6 @@ public class VCardRecorderService extends Task{
 
 
     public synchronized void readAndSaveCards() {
-        //TODO test implementation
         List<Path> files = FilesCrawler.getFiles(properties.getProperty("vcards.folder"));
         System.out.println("Starting registering into DB");
         int i = 0;

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Class util for crawling through files
  * Created by Matthieu on 11/01/2016.
  */
 public class FilesCrawler {
@@ -18,7 +19,6 @@ public class FilesCrawler {
      * @return the list of Path containing the different files
      */
     public static List<Path> getFiles(String path) {
-        //TODO test implementation
         Path root = Paths.get(path);
         ArrayList<Path> paths = new ArrayList<>();
         try (DirectoryStream<Path> files = Files.newDirectoryStream(root)) {

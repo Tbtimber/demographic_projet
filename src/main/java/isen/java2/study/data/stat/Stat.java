@@ -4,9 +4,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * Interface for Stat type class
  * Created by Matthieu on 11/01/2016.
  */
-//TODO implement different stat classes + tests
+
 public interface Stat {
     String getDescription();
     String getQuery();
