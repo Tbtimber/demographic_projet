@@ -10,9 +10,11 @@ import java.sql.*;
 import java.util.Properties;
 
 /**
+ * Class service that manage the DBquery and update
  * Created by Matthieu on 11/01/2016.
  */
 public class DBService {
+    private static final String TRUNCATE_PERSON = "TRUNCATE TABLE person";
     private static final String SAVE_QUERY = "INSERT INTO `isen_project`.`person` (`lastname`, `firstname`, `sex`, " +
             "`streetname`, `state`, `city`, `bloodtype`, `dateofbirth`) VALUES (?, ?,?, ?, ?, ?, ?, ?)";
     MysqlDataSource dataSource;
@@ -33,7 +35,7 @@ public class DBService {
         try (Connection connection = dataSource.getConnection(); PreparedStatement stmt = connection.prepareStatement(SAVE_QUERY)){
             stmt.setString(1, person.getLastName());
             stmt.setString(2, person.getFirstName());
-            String sex = null;
+            String sex;
             if(person.getSex() == Sex.MALE)
                 sex = "MALE";
             else
@@ -57,6 +59,16 @@ public class DBService {
             ResultSet set = stmt.executeQuery();
             stat.handle(set);
             set.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void truncatePersonTable() {
+        try (Connection connection = dataSource.getConnection(); PreparedStatement stmt = connection.prepareStatement(TRUNCATE_PERSON)){
+            int nbLines = stmt.executeUpdate();
+            HistoricUtil.concatLinesAdded(nbLines);
+            System.out.println("DB truncated !");
         } catch (SQLException e) {
             e.printStackTrace();
         }

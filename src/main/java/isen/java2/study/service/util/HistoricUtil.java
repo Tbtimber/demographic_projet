@@ -11,15 +11,16 @@ import java.nio.file.Paths;
 import java.util.List;
 
 /**
+ * Classutil that will manage the historic.tx file and give the data to the chart when saving
+ *
  * Created by Matthieu on 16/01/2016.
  */
 public class HistoricUtil {
     private static int linesAdded = 0;
     private static int currentSessionIndex = -1;
 
-
-
-    private static final Path FILEPATH = Paths.get("c:/isen/java2/project/historic.txt");
+    private static final Path FILEPATH = Paths.get("historic.txt");
+    //private static final Path FILEPATH = Paths.get("c:/isen/java2/project/historic.txt");
 
     public static void addDataToSerie(XYChart.Series serie){
         try {

@@ -17,6 +17,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -24,6 +25,7 @@ import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 
+import java.beans.EventHandler;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
+ * Main view controller class
  * Created by Matthieu on 13/01/2016.
  */
 public class  MainViewController implements VCardListener, ChangeListener{
@@ -79,6 +82,10 @@ public class  MainViewController implements VCardListener, ChangeListener{
     private TextField textField;
 
     @FXML
+    private Button emptyDatabseButton;
+
+
+    @FXML
     private Button gotoHistoric;
 
     private Scene prepareHistoricScene() {
@@ -90,10 +97,9 @@ public class  MainViewController implements VCardListener, ChangeListener{
         xAxis.setLabel("Session index");
         yAxis.setLabel("Lines added to Database");
 
-        final LineChart<Number,Number> lineChart = new LineChart<Number, Number>(xAxis,yAxis);
-
+        final LineChart<Number,Number> lineChart = new LineChart<>(xAxis,yAxis);
+        lineChart.setTitle("Lines added to Database per session");
         XYChart.Series serie = new XYChart.Series();
-
         serie.setName("Lines");
         HistoricUtil.addDataToSerie(serie);
         lineChart.getData().add(serie);
@@ -101,6 +107,13 @@ public class  MainViewController implements VCardListener, ChangeListener{
         return new Scene(lineChart, 760,573);
     }
 
+
+    @FXML
+    public void handleTruncateButton() {
+        newThingsToSay("Started truncating peson table\n.......................\n");
+        dbService.truncatePersonTable();
+        newThingsToSay("Table: 'person' emptied\n");
+    }
 
     @FXML
     public void handleGoToHistoric() {
@@ -166,23 +179,16 @@ public class  MainViewController implements VCardListener, ChangeListener{
 
     @FXML
     public void handleReadVCard() {
-        //vCardRecorderService.readAndSaveCards();
-        //vCardRecorderService.start();
         try {
             VCardRecorderService recorderService = new VCardRecorderService(dbService,property,this, stringProperty);
-            //recorderService.setDaemon(true);
-            //recorderService.start();
-            //recorderService.readAndSaveCards();
             recorderService.messageProperty().addListener(this);
             Thread th = new Thread(recorderService);
             th.setDaemon(true);
             progressBar.progressProperty().bind(recorderService.progressProperty());
             th.start();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     @FXML
